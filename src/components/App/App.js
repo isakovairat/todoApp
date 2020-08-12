@@ -80,6 +80,16 @@ export default class App extends Component {
     return counter;
   };
 
+  onEdit = (id, newDescription) => {
+    this.setState(({ todoData }) => {
+      const editedElement = todoData.find((el) => el.id === id);
+      editedElement.description = newDescription;
+      return {
+        todoData: [...todoData],
+      };
+    });
+  };
+
   filter(items, filter) {
     switch (filter) {
       case 'all':
@@ -104,7 +114,12 @@ export default class App extends Component {
         <Header />
         <NewTodoForm onItemAdded={this.addItem} />
         <section className="main">
-          <TodoList todoData={visibleItems} onDeleted={this.deleteItem} onChecked={this.onCheckedItem} />
+          <TodoList
+            todoData={visibleItems}
+            onDeleted={this.deleteItem}
+            onChecked={this.onCheckedItem}
+            onEdit={this.onEdit}
+          />
           <Footer
             todoCount={todoCount}
             filter={filter}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Todo from '../Todo';
 import './TodoList.css';
 
-const TodoList = ({ todoData, onDeleted, onChecked }) => {
+const TodoList = ({ todoData, onDeleted, onChecked, onEdit }) => {
   const elements = todoData.map((el) => {
     const { description, id, completed, date } = el;
     const className = completed ? 'completed' : 'active';
@@ -16,6 +16,7 @@ const TodoList = ({ todoData, onDeleted, onChecked }) => {
           completed={completed}
           onDeleted={() => onDeleted(id)}
           onChecked={() => onChecked(id)}
+          onEdit={(newDescription) => onEdit(id, newDescription)}
         />
       </li>
     );
@@ -28,6 +29,7 @@ TodoList.defaultProps = {
   todoData: [],
   onDeleted: () => {},
   onChecked: () => {},
+  onEdit: () => {},
 };
 
 TodoList.propTypes = {
@@ -41,6 +43,7 @@ TodoList.propTypes = {
   ),
   onDeleted: PropTypes.func,
   onChecked: PropTypes.func,
+  onEdit: PropTypes.func,
 };
 
 export default TodoList;
