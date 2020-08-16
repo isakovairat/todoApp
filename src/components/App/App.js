@@ -10,7 +10,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.id = 1;
+    this.id = 0;
     this.state = {
       todoData: [this.createItem('Completed task'), this.createItem('Editing task'), this.createItem('Active task')],
       filter: 'all', // active, all, done
@@ -38,10 +38,16 @@ export default class App extends Component {
 
   onCheckedItem = (id) => {
     this.setState(({ todoData }) => {
-      const checkedElement = todoData.find((el) => el.id === id);
-      checkedElement.completed = !checkedElement.completed;
       return {
-        todoData: [...todoData],
+        todoData: todoData.map((el) => {
+          if (el.id === id) {
+            const newEl = el;
+            newEl.completed = !el.completed;
+            return newEl;
+          }
+
+          return el;
+        }),
       };
     });
   };
@@ -82,10 +88,16 @@ export default class App extends Component {
 
   onEdit = (id, newDescription) => {
     this.setState(({ todoData }) => {
-      const editedElement = todoData.find((el) => el.id === id);
-      editedElement.description = newDescription;
       return {
-        todoData: [...todoData],
+        todoData: todoData.map((el) => {
+          if (el.id === id) {
+            const newEl = el;
+            newEl.description = newDescription;
+            return newEl;
+          }
+
+          return el;
+        }),
       };
     });
   };

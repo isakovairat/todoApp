@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import './Todo.css';
 
@@ -55,7 +56,7 @@ export default class Todo extends Component {
     const { onEdit } = this.props;
 
     event.preventDefault();
-    onEdit(event.target.value);
+    onEdit(event.target.firstChild.defaultValue);
     this.setState({
       isEdit: false,
       dateString: 'less than 5 seconds',
@@ -88,16 +89,13 @@ export default class Todo extends Component {
         <input className="toggle" type="checkbox" onChange={onChecked} checked={completed} />
         <label>
           {descriptionView}
-          <span className="created" style={isEdit ? { display: 'none' } : {}}>
-            {dateString} ago
-          </span>
+          <span className={clsx({ created: true }, { hidden: isEdit })}>{dateString} ago</span>
         </label>
         <button
           type="button"
-          className="icon icon-edit"
+          className={clsx('icon icon-edit', isEdit && 'hidden')}
           aria-label="Edit"
           onClick={this.handleEditClick}
-          style={isEdit ? { display: 'none' } : {}}
         />
         <button type="button" className="icon icon-destroy" onClick={onDeleted} aria-label="Delete" />
       </div>
