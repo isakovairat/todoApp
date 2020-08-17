@@ -41,9 +41,7 @@ export default class App extends Component {
       return {
         todoData: todoData.map((el) => {
           if (el.id === id) {
-            const newEl = el;
-            newEl.completed = !el.completed;
-            return newEl;
+            return { ...el, completed: !el.completed };
           }
 
           return el;
@@ -91,9 +89,7 @@ export default class App extends Component {
       return {
         todoData: todoData.map((el) => {
           if (el.id === id) {
-            const newEl = el;
-            newEl.description = newDescription;
-            return newEl;
+            return { ...el, description: newDescription };
           }
 
           return el;
