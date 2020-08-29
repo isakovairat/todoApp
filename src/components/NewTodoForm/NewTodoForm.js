@@ -13,28 +13,48 @@ export default class NewTodoForm extends Component {
 
   state = {
     label: '',
+    minutes: 0,
+    seconds: 0,
   };
 
-  onLabelChange = (event) => {
-    this.setState({
-      label: event.target.value,
+  handleSubmit = (event) => {
+    const { onItemAdded } = this.props;
+    const { label, minutes, seconds } = this.state;
+    const transformedSeconds = Number(minutes) * 60 + Number(seconds);
+    onItemAdded(label, transformedSeconds);
+    event.preventDefault();
+    const inputs = event.target.querySelectorAll('input');
+    inputs.forEach((input) => {
+      const newInput = input;
+      newInput.value = '';
     });
   };
 
-  onSubmit = (event) => {
-    const { onItemAdded } = this.props;
-    const { label } = this.state;
-
-    event.preventDefault();
-    onItemAdded(label);
-    const input = event.target.querySelector('input');
-    input.value = '';
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
-        <input className="new-todo" placeholder="What needs to be done?" onChange={this.onLabelChange} />
+      <form className="new-todo-form" onSubmit={this.handleSubmit}>
+        <input className="new-todo" type="text" name="label" placeholder="Task" onChange={this.handleChange} />
+        <input
+          className="new-todo-form__timer"
+          type="text"
+          name="minutes"
+          placeholder="Min"
+          onChange={this.handleChange}
+        />
+        <input
+          className="new-todo-form__timer"
+          type="text"
+          name="seconds"
+          placeholder="Sec"
+          onChange={this.handleChange}
+        />
+        <input type="submit" style={{ display: 'none' }} />
       </form>
     );
   }

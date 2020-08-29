@@ -10,9 +10,10 @@ export default class Todo extends Component {
     description: 'Some new task',
     date: new Date(),
     completed: false,
-    onDeleted: () => {},
     onChecked: () => {},
+    onDeleted: () => {},
     onEdit: () => {},
+    seconds: 0,
   };
 
   static propTypes = {
@@ -22,17 +23,20 @@ export default class Todo extends Component {
     onChecked: PropTypes.func,
     onDeleted: PropTypes.func,
     onEdit: PropTypes.func,
+    seconds: PropTypes.number,
   };
 
   constructor(props) {
     super(props);
 
-    const { date, description } = props;
+    const { date, description, seconds } = props;
     this.state = {
       dateString: 'less than 5 seconds',
       isEdit: false,
       description,
       date,
+      currentTime: seconds,
+      isPaused: false,
     };
   }
 
@@ -65,19 +69,42 @@ export default class Todo extends Component {
   };
 
   tick = () => {
-    const { date } = this.state;
+    const { date, currentTime, isPaused } = this.state;
+    let newCurrentTime;
+    if (currentTime === 0) {
+      newCurrentTime = 0;
+    } else {
+      newCurrentTime = isPaused ? currentTime : currentTime - 1;
+    }
 
     this.setState({
       dateString: formatDistanceToNow(date, { includeSeconds: true }),
+      currentTime: newCurrentTime,
     });
+  };
+
+  handlePlayClick = () => {
+    this.setState({ isPaused: false });
+  };
+
+  handlePlayPause = () => {
+    this.setState({ isPaused: true });
+  };
+
+  formatSecondsToTime = (seconds) => {
+    const minutesToShow = Math.floor(seconds / 60);
+    const secondsToShow = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60;
+    return `${minutesToShow}:${secondsToShow}`;
   };
 
   render() {
     const { completed, onDeleted, onChecked } = this.props;
-    const { description, dateString, isEdit } = this.state;
+    const { description, dateString, isEdit, currentTime } = this.state;
 
     const descriptionView = !isEdit ? (
-      <span className="description">{description}</span>
+      <span style={{ flexBasis: '45%' }} className="title">
+        {description}
+      </span>
     ) : (
       <form onSubmit={this.handleSubmit} className="editForm">
         <input value={description} className="editInput" onChange={this.handleEditChange} />
@@ -87,9 +114,29 @@ export default class Todo extends Component {
     return (
       <div className="view">
         <input className="toggle" type="checkbox" onChange={onChecked} checked={completed} />
-        <label>
+        <label style={{ display: 'flex' }}>
           {descriptionView}
-          <span className={clsx({ created: true }, { hidden: isEdit })}>{dateString} ago</span>
+          <button
+            className={clsx('icon icon-play', isEdit && 'hidden')}
+            onClick={this.handlePlayClick}
+            aria-label="Play"
+            type="button"
+          />
+          <button
+            className={clsx('icon icon-pause', isEdit && 'hidden')}
+            onClick={this.handlePlayPause}
+            aria-label="Pause"
+            type="button"
+          />
+          <span className={clsx({ description: true }, { hidden: isEdit })}>
+            {this.formatSecondsToTime(currentTime)}
+          </span>
+          <span
+            style={{ flexBasis: '37%', textAlign: 'right' }}
+            className={clsx({ description: true }, { created: true }, { hidden: isEdit })}
+          >
+            {dateString} ago
+          </span>
         </label>
         <button
           type="button"

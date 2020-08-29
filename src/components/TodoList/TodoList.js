@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Todo from '../Todo';
-import './TodoList.css';
 
 const TodoList = ({ todoData, onDeleted, onChecked, onEdit }) => {
   const elements = todoData.map((el) => {
-    const { description, id, completed, date } = el;
+    const { description, id, completed, date, seconds } = el;
     const className = completed ? 'completed' : 'active';
 
     return (
       <li key={id} className={className}>
         <Todo
+          seconds={seconds}
           description={description}
           date={date}
           completed={completed}

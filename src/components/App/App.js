@@ -17,14 +17,14 @@ export default class App extends Component {
     };
   }
 
-  createItem = (description) => {
+  createItem = (description, seconds = 600) => {
     this.id += 1;
-
     return {
       description,
       id: this.id,
       completed: false,
       date: new Date(),
+      seconds,
     };
   };
 
@@ -50,8 +50,8 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text) => {
-    const newItem = this.createItem(text);
+  addItem = (text, seconds) => {
+    const newItem = this.createItem(text, seconds);
 
     this.setState(({ todoData }) => {
       return {
