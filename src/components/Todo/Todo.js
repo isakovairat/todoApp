@@ -133,7 +133,11 @@ export default class Todo extends Component {
           </span>
           <span
             style={{ flexBasis: '37%', textAlign: 'right' }}
-            className={clsx({ description: true }, { created: true }, { hidden: isEdit })}
+            className={clsx({
+              description: true,
+              created: true,
+              hidden: isEdit,
+            })}
           >
             {dateString} ago
           </span>
