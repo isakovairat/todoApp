@@ -36,7 +36,7 @@ export default class Todo extends Component {
       description,
       date,
       currentTime: seconds,
-      isPaused: false,
+      isPaused: true,
     };
   }
 
